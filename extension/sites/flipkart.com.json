@@ -1,0 +1,38 @@
+{
+  "$schema": "../../schema/site.schema.json",
+  "id": "flipkart",
+  "name": "Flipkart",
+  "domains": ["flipkart.com"],
+  "currency": "INR",
+  "maintainers": ["doyoulikeit"],
+  "lastVerified": "2026-11-21",
+
+  "hide": {
+    "price": [
+      "[data-id] a[href*='/p/']:not([title]):not(:has(img))"
+    ]
+  },
+
+  "remove": {
+    "priceFilters": [
+      "section:has(select)"
+    ]
+  },
+
+  "product": {
+    "card": "[data-id]",
+    "idAttr": "data-id",
+    "title": "a[title]",
+    "image": "img[src*='/image/']",
+    "likeAnchor": "a[href*='/p/']:has(img)"
+  },
+
+  "productPage": {
+    "urlPattern": "[?&]pid=([A-Z0-9]+)",
+    "title": "h1",
+    "image": "img[src*='/image/']",
+    "likeAnchor": "h1"
+  },
+
+  "genericDetection": true
+}

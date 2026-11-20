@@ -1,0 +1,66 @@
+{
+  "$schema": "../../schema/site.schema.json",
+  "id": "myntra",
+  "name": "Myntra",
+  "domains": ["myntra.com"],
+  "currency": "INR",
+  "maintainers": ["doyoulikeit"],
+  "lastVerified": "2026-11-21",
+
+  "hide": {
+    "price": [
+      ".product-price",
+      ".pdp-price",
+      ".pdp-mrp",
+      ".pdp-mrp-verbiage-amt",
+      ".PriceInfo-price",
+      ".PriceInfo-mrp",
+      ".product-item-selling-price",
+      ".product-item-mrp",
+      ".pdp-offers-price"
+    ],
+    "discount": [
+      ".product-discountPercentage",
+      ".pdp-discount",
+      ".PriceInfo-discount",
+      ".product-item-discount"
+    ]
+  },
+
+  "remove": {
+    "offers": [
+      ".pdp-offers-container",
+      ".FreeShippingBanner-sidebar"
+    ],
+    "priceFilters": [
+      ".vertical-filters-filters:has(.discount-list)",
+      ".verticalFilters-filters:has(.slider-root)"
+    ],
+    "sortOptions": [
+      ".sort-list li:has(input[value^='price'])",
+      ".sort-list li:has(input[value='discount'])"
+    ]
+  },
+
+  "product": {
+    "card": "li.product-base",
+    "idAttr": "id",
+    "title": ".product-product",
+    "image": "picture img",
+    "price": ".product-discountedPrice",
+    "likeAnchor": ".product-imageSliderContainer"
+  },
+
+  "productPage": {
+    "urlPattern": "/(\\d{5,})(?:/buy)?/?$",
+    "title": ".pdp-name",
+    "image": ".image-grid-image",
+    "price": ".pdp-price",
+    "likeAnchor": ".pdp-name"
+  },
+
+  "productUrl": "https://www.myntra.com/{id}",
+
+  "ignore": [".desktop-categoryLink"],
+  "genericDetection": true
+}
