@@ -4,8 +4,10 @@
 const $ = (id) => document.getElementById(id);
 let revealed = false;
 
+// "₹1,299", "Rs. 637" and "INR 99.50" all become numbers. Take the number itself,
+// so the dot in "Rs." isn't read as a decimal point.
 function amount(price) {
-  const n = parseFloat(String(price).replace(/[^\d.]/g, ''));
+  const n = parseFloat(String(price).match(/\d[\d,]*(?:\.\d+)?/)?.[0].replace(/,/g, '') ?? '');
   return Number.isFinite(n) ? n : 0;
 }
 

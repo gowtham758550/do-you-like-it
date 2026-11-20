@@ -16,6 +16,10 @@
   "remove": {
     "priceFilters": [
       "section:has(select)"
+    ],
+    "sortOptions": [
+      ".s6YJlm > .WNv7PR:nth-child(4)",
+      ".s6YJlm > .WNv7PR:nth-child(5)"
     ]
   },
 

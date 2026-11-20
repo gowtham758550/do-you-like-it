@@ -34,7 +34,14 @@
       "#dealBadge_feature_div"
     ],
     "unitPrice": [
-      "span.a-size-base:has(> .a-price.a-text-price)"
+      "span.a-size-base:has(> .a-price.a-text-price)",
+      ".contains-ppu",
+      ".centralizedApexPricePerUnitCSS",
+      "span.aok-relative:has(.apex-priceperunit-value)",
+      "[class*='ppu-info']"
+    ],
+    "ads": [
+      "div[id^='ape_'][id$='_placement']"
     ],
     "offers": [
       "#vsxoffers_feature_div",
