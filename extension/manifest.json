@@ -2,16 +2,22 @@
   "manifest_version": 3,
   "name": "Do You Like It?",
   "short_name": "Do You Like It",
-  "version": "0.1.1",
-  "description": "Hide prices while you shop together. Let them pick what they love. The price is your problem.",
+  "version": "0.2.0",
+  "description": "Hide prices while you shop together. Let them pick what they love. Works on Amazon, eBay, Etsy, IKEA and more, in any currency.",
   "icons": {
     "16": "icons/icon-16.png",
     "32": "icons/icon-32.png",
     "48": "icons/icon-48.png",
     "128": "icons/icon-128.png"
   },
-  "permissions": ["storage"],
-  "background": { "service_worker": "background.js" },
+  "permissions": [
+    "storage",
+    "scripting",
+    "activeTab"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "action": {
     "default_title": "Do You Like It?",
     "default_popup": "popup.html",
@@ -22,15 +28,40 @@
   },
   "commands": {
     "toggle-hiding": {
-      "suggested_key": { "default": "Alt+Shift+P", "mac": "Alt+Shift+P" },
+      "suggested_key": {
+        "default": "Alt+Shift+P",
+        "mac": "Alt+Shift+P"
+      },
       "description": "Hide or show prices"
     }
   },
   "content_scripts": [
     {
-      "matches": ["*://*.amazon.in/*", "*://*.flipkart.com/*", "*://*.myntra.com/*"],
-      "js": ["content.js"],
+      "matches": [
+        "*://*.amazon.in/*",
+        "*://*.flipkart.com/*",
+        "*://*.myntra.com/*"
+      ],
+      "js": [
+        "currency.js",
+        "content.js"
+      ],
       "run_at": "document_start"
     }
+  ],
+  "optional_host_permissions": [
+    "*://*.amazon.com/*",
+    "*://*.amazon.co.uk/*",
+    "*://*.amazon.de/*",
+    "*://*.amazon.ca/*",
+    "*://*.amazon.com.au/*",
+    "*://*.amazon.ae/*",
+    "*://*.ebay.com/*",
+    "*://*.ebay.co.uk/*",
+    "*://*.ebay.de/*",
+    "*://*.ebay.com.au/*",
+    "*://*.ebay.ca/*",
+    "*://*.etsy.com/*",
+    "*://*.ikea.com/*"
   ]
 }

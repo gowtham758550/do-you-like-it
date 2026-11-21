@@ -1,12 +1,51 @@
 {
   "$schema": "../../schema/site.schema.json",
-  "id": "amazon-in",
-  "name": "Amazon India",
-  "domains": ["amazon.in"],
+  "id": "amazon",
+  "name": "Amazon",
+  "domains": [
+    "amazon.in",
+    "amazon.com",
+    "amazon.co.uk",
+    "amazon.de",
+    "amazon.ca",
+    "amazon.com.au",
+    "amazon.ae"
+  ],
   "currency": "INR",
-  "maintainers": ["doyoulikeit"],
-  "lastVerified": "2026-11-20",
-
+  "regions": {
+    "amazon.in": {
+      "name": "Amazon India",
+      "currency": "INR"
+    },
+    "amazon.com": {
+      "name": "Amazon US",
+      "currency": "USD"
+    },
+    "amazon.co.uk": {
+      "name": "Amazon UK",
+      "currency": "GBP"
+    },
+    "amazon.de": {
+      "name": "Amazon Germany",
+      "currency": "EUR"
+    },
+    "amazon.ca": {
+      "name": "Amazon Canada",
+      "currency": "CAD"
+    },
+    "amazon.com.au": {
+      "name": "Amazon Australia",
+      "currency": "AUD"
+    },
+    "amazon.ae": {
+      "name": "Amazon UAE",
+      "currency": "AED"
+    }
+  },
+  "maintainers": [
+    "doyoulikeit"
+  ],
+  "lastVerified": "2026-11-21",
   "hide": {
     "price": [
       ".a-price",
@@ -27,7 +66,6 @@
       "[id$='_couponBadge']"
     ]
   },
-
   "remove": {
     "deals": [
       ".a-badge[data-a-badge-type='deal']",
@@ -58,7 +96,6 @@
       ".a-popover li:has(a[data-value*='price-desc-rank'])"
     ]
   },
-
   "product": {
     "card": "[data-component-type='s-search-result']",
     "idAttr": "data-asin",
@@ -67,7 +104,6 @@
     "price": ".a-price:not(.a-text-price) .a-offscreen",
     "likeAnchor": ".s-product-image-container"
   },
-
   "productPage": {
     "urlPattern": "/(?:dp|gp/product)/([A-Z0-9]{10})",
     "title": "#productTitle",
@@ -75,9 +111,13 @@
     "price": "#corePriceDisplay_desktop_feature_div .priceToPay",
     "likeAnchor": "#titleSection"
   },
-
-  "productUrl": "https://www.amazon.in/dp/{id}",
-
-  "ignore": ["#nav-search"],
+  "productUrl": "https://www.{domain}/dp/{id}",
+  "cart": {
+    "url": "https://www.{domain}/gp/aws/cart/add.html",
+    "item": "ASIN.{n}={id}&Quantity.{n}=1"
+  },
+  "ignore": [
+    "#nav-search"
+  ],
   "genericDetection": true
 }

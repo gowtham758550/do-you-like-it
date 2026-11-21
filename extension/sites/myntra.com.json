@@ -47,7 +47,7 @@
     "idAttr": "id",
     "title": ".product-product",
     "image": "picture img",
-    "price": ".product-discountedPrice",
+    "price": ".product-price",
     "likeAnchor": ".product-imageSliderContainer"
   },
 

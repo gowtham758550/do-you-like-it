@@ -1,0 +1,72 @@
+# Builds the Chrome Web Store zip on every push to main and publishes it on the Releases page.
+# The release is tagged v<version> from extension/manifest.json; pushing again with the same
+# version replaces that release's zip. Pull requests only validate.
+name: Release
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validate site files
+        run: node scripts/validate.mjs
+
+      - name: Check JavaScript syntax
+        run: for f in extension/*.js; do node --check "$f"; done
+
+      - name: Build zip
+        id: build
+        run: |
+          VERSION=$(node -p "require('./extension/manifest.json').version")
+          ZIP="do-you-like-it-${VERSION}.zip"
+          mkdir -p dist
+          (cd extension && zip -qr "../dist/${ZIP}" . -x '.*')
+          unzip -l "dist/${ZIP}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "zip=dist/${ZIP}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload build (for pull requests)
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: do-you-like-it-${{ steps.build.outputs.version }}
+          path: ${{ steps.build.outputs.zip }}
+
+      - name: Publish release
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.build.outputs.version }}
+          ZIP: ${{ steps.build.outputs.zip }}
+        run: |
+          TAG="v${VERSION}"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$ZIP" --clobber
+            echo "Updated the zip on existing release $TAG"
+          else
+            gh release create "$TAG" "$ZIP" \
+              --target "$GITHUB_SHA" \
+              --title "Do You Like It? ${VERSION}" \
+              --notes "Upload \`$(basename "$ZIP")\` to the Chrome Web Store (Package → Upload new package)." \
+              --generate-notes
+            echo "Created release $TAG"
+          fi

@@ -1,0 +1,60 @@
+{
+  "$schema": "../../schema/site.schema.json",
+  "id": "ebay",
+  "name": "eBay",
+  "domains": ["ebay.com", "ebay.co.uk", "ebay.de", "ebay.com.au", "ebay.ca"],
+  "currency": "USD",
+  "regions": {
+    "ebay.com": { "name": "eBay US", "currency": "USD" },
+    "ebay.co.uk": { "name": "eBay UK", "currency": "GBP" },
+    "ebay.de": { "name": "eBay Germany", "currency": "EUR" },
+    "ebay.com.au": { "name": "eBay Australia", "currency": "AUD" },
+    "ebay.ca": { "name": "eBay Canada", "currency": "CAD" }
+  },
+  "maintainers": ["doyoulikeit"],
+  "lastVerified": "2026-11-21",
+
+  "hide": {
+    "price": [
+      ".s-card__price",
+      ".x-price-primary",
+      ".x-price-approx",
+      ".x-additional-info"
+    ],
+    "discount": [
+      ".s-card .strikethrough"
+    ]
+  },
+
+  "remove": {
+    "priceFilters": [
+      "li:has(a[href*='_udlo'])",
+      "li:has(a[href*='_udhi'])"
+    ],
+    "sortOptions": [
+      "li:has(> a[href*='_sop=15'])",
+      "li:has(> a[href*='_sop=16'])"
+    ]
+  },
+
+  "product": {
+    "card": "li.s-card[data-listingid]",
+    "idAttr": "data-listingid",
+    "title": ".s-card__title",
+    "image": "img.s-card__image",
+    "price": ".s-card__price",
+    "likeAnchor": ".s-card__media-wrapper"
+  },
+
+  "productPage": {
+    "urlPattern": "/itm/(?:[^/]+/)?(\\d{9,})",
+    "title": "h1.x-item-title__mainTitle",
+    "image": ".ux-image-carousel-item.active img",
+    "price": ".x-price-primary",
+    "likeAnchor": ".x-item-title"
+  },
+
+  "productUrl": "https://www.{domain}/itm/{id}",
+
+  "genericDetection": true
+}

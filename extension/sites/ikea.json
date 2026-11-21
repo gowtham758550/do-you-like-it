@@ -1,0 +1,51 @@
+{
+  "$schema": "../../schema/site.schema.json",
+  "id": "ikea",
+  "name": "IKEA",
+  "domains": ["ikea.com"],
+  "currency": "USD",
+  "maintainers": ["doyoulikeit"],
+  "lastVerified": "2026-11-21",
+
+  "hide": {
+    "price": [
+      "[class*='price-module__primary-currency-price']",
+      "[class*='price-module__addon']"
+    ],
+    "discount": [
+      "[class*='price-module__offer-message']",
+      "[class*='price-module__comparison-price']"
+    ]
+  },
+
+  "remove": {
+    "offers": [
+      ".pipf-more-ways-to-pay"
+    ],
+    "priceFilters": [
+      ".plp-accordion__item:has(#filter-PRICE)"
+    ],
+    "sortOptions": [
+      ".plp-radio-button:has(input[value^='PRICE_'])"
+    ]
+  },
+
+  "product": {
+    "card": "div.plp-mastercard[data-product-number]",
+    "idAttr": "data-product-number",
+    "title": "h3",
+    "image": "img.plp-product__image",
+    "price": "[class*='price-module__primary-currency-price']",
+    "likeAnchor": ".plp-product__image-link"
+  },
+
+  "productPage": {
+    "urlPattern": "/p/[^/]*-(s?\\d{8})/?$",
+    "title": "h1",
+    "image": "img.pipf-image",
+    "price": "[class*='price-module__primary-currency-price']",
+    "likeAnchor": "h1"
+  },
+
+  "genericDetection": true
+}

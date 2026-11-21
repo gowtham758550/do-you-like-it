@@ -14,7 +14,7 @@ A Chrome extension for shopping together with anyone you're buying for. It hides
 
 1. Open `chrome://extensions` and switch on **Developer mode** (top right).
 2. Click **Load unpacked** and pick the `extension/` folder.
-3. Open [Amazon.in](https://www.amazon.in), [Flipkart](https://www.flipkart.com) or [Myntra](https://www.myntra.com) and search for anything.
+3. Open [Amazon.in](https://www.amazon.in), [Flipkart](https://www.flipkart.com) or [Myntra](https://www.myntra.com) and search for anything. For Amazon in other countries, eBay, Etsy or IKEA, open the store, click the toolbar button and choose **Turn on**.
 
 - The pill in the bottom-right corner, the toolbar popup, or **Alt+Shift+P** turns hiding on and off.
 - Tap **♡ Like** on a product card or product page to save it.
@@ -24,33 +24,41 @@ A Chrome extension for shopping together with anyone you're buying for. It hides
 
 Everything runs in your browser. Nothing is sent anywhere.
 
-1. **Site rules** (`extension/sites/*.json`): CSS selectors per site for what to hide (`hide`), what to remove (`remove`), and where products are (`product`, `productPage`). Selectors in the `price` group get a fixed-width placeholder, so ₹999 and ₹49,999 look the same.
-2. **Generic ₹ detector**: catches any `₹1,234`, `Rs. 500`, `INR 99` or `20% off` the rules miss, including prices split across elements, and keeps watching as the page loads more products.
+1. **Site rules** (`extension/sites/*.json`): CSS selectors per site for what to hide (`hide`), what to remove (`remove`), and where products are (`product`, `productPage`). Selectors in the `price` group get a fixed-width placeholder, so $9 and $900 look the same. Stores with one site per country (Amazon, eBay) list every domain in one file, with a name and currency per domain under `regions`.
+2. **Generic price detector** (`extension/currency.js`): catches prices in any currency (`$1,299.99`, `1.299,99 €`, `£49`, `₹1,23,456`, `CHF 49.–`, `20% off`) that the rules miss, including prices split across elements, and keeps watching as the page loads more products.
 
-If a site file has no `price` selector for products, the extension saves the first ₹ amount after the product's title. That's how Flipkart works, since its class names change often.
+If a site file has no `price` selector for products, the extension saves the first price after the product's title. That's how Flipkart works, since its class names change often.
+
+**Always-on and optional stores.** Amazon.in, Flipkart and Myntra are on from install. Every other store is an optional permission: the popup offers "Turn on" when you visit it, and the extension then runs only on stores you've approved.
+
+**Picks list.** Grouped by store (fold each group open or closed), with subtotals and a total per currency. "Open all" opens a group in tabs; Amazon groups also get "Add all to cart". Checkout always happens on the store's own site.
 
 ## Add a site
 
 Site files are data only: CSS selectors and settings, never code. To add one:
 
-1. Copy `extension/sites/amazon.in.json` to `extension/sites/<domain>.json` and change the selectors.
+1. Copy `extension/sites/etsy.json` (one domain) or `extension/sites/ebay.json` (one domain per country) to `extension/sites/<id>.json` and change the selectors.
 2. Add the file name to `extension/sites/index.json`.
-3. Add the domain to `content_scripts.matches` in `extension/manifest.json`.
+3. Add `*://*.<domain>/*` for each domain to `optional_host_permissions` in `extension/manifest.json`. New stores are optional; users turn them on from the popup.
 4. Run `node scripts/validate.mjs`.
 5. Load the extension, check prices are hidden on search and product pages, and open a pull request with a screenshot.
 
 `schema/site.schema.json` documents every field.
 
-## Publishing
+## Releases
 
-- `store/LISTING.md`: text for every Chrome Web Store field
-- `store/privacy.html`: privacy policy, to publish at a public URL
+Every push to `main` builds the extension and publishes `do-you-like-it-<version>.zip` on the [Releases page](https://github.com/gowtham758550/do-you-like-it/releases), tagged `v<version>` from `extension/manifest.json`. That zip is the file to upload to the Chrome Web Store. Bump `version` in the manifest to publish a new release; pushing again with the same version replaces that release's zip.
+
+`main` only accepts changes through pull requests.
+
+Other publishing files:
+- `store/privacy.html`: privacy policy, served by GitHub Pages
 - `store/screenshot-*.png` and `store/promo-small.png`: store images
-- Build the upload file: `cd extension && zip -r ../dist/do-you-like-it-<version>.zip . -x '.*'`
+- Build the zip locally: `cd extension && zip -r ../dist/do-you-like-it-<version>.zip . -x '.*'`
 
 ## Status
 
-Version 0.1.0, tested on Amazon.in, Flipkart and Myntra search and product pages (21 November 2026). Not yet included: a PIN to stop hiding being turned off, and a shareable lookbook.
+Version 0.2.0. Stores: Amazon (IN, US, UK, DE, CA, AU, AE), eBay (US, UK, DE, AU, CA), Etsy, IKEA (every country), Flipkart, Myntra. Not yet included: a PIN to stop hiding being turned off, a shareable lookbook, and Shopify/Walmart/Zara rules. Known gap: Etsy shows prices inside size dropdowns, which page styles can't reach.
 
 ## License
 
