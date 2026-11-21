@@ -1,0 +1,40 @@
+{
+  "$schema": "../../schema/site.schema.json",
+  "id": "etsy",
+  "name": "Etsy",
+  "domains": ["etsy.com"],
+  "currency": "USD",
+  "maintainers": ["doyoulikeit"],
+  "lastVerified": "2026-11-21",
+
+  "hide": {
+    "price": [
+      ".n-listing-card__price",
+      "[data-buy-box-region='price']"
+    ],
+    "discount": [
+      ".mix-and-match-badge"
+    ]
+  },
+
+  "product": {
+    "card": "div.v2-listing-card[data-listing-id]",
+    "idAttr": "data-listing-id",
+    "title": "h3",
+    "image": "img",
+    "price": ".n-listing-card__price",
+    "likeAnchor": "a.v2-listing-card__img"
+  },
+
+  "productPage": {
+    "urlPattern": "/listing/(\\d+)",
+    "title": "h1[data-buy-box-listing-title]",
+    "image": "img.carousel-image",
+    "price": "[data-buy-box-region='price']",
+    "likeAnchor": "h1[data-buy-box-listing-title]"
+  },
+
+  "productUrl": "https://www.etsy.com/listing/{id}",
+
+  "genericDetection": true
+}

@@ -1,14 +1,12 @@
 // Do You Like It? — content script.
-// Hides prices using the site's rules file, runs a generic ₹ detector for
-// anything the rules miss, and adds ❤️ buttons that save picks.
+// Hides prices using the site's rules file, runs a generic price detector (any
+// currency, see currency.js) for anything the rules miss, and adds ❤️ buttons that save picks.
 (() => {
   const ON = 'dyli-on';
-  const PRICE = String.raw`(?:₹|\bRs\.?|\bINR)\s?\d[\d,]*(?:\.\d+)?`;
-  const MONEY = String.raw`${PRICE}|\(?\b\d{1,2}%\s*off\)?`;
+  const { PRICE, DISCOUNT, SYMBOL_ONLY, NUMBER_ONLY } = globalThis.DYLI_CURRENCY;
+  const MONEY = `${PRICE}|${DISCOUNT}`;
   const hasMoney = (s) => new RegExp(MONEY, 'i').test(s);
-  // Some sites split a price into "₹" and "1,234" in separate elements.
-  const SYMBOL_ONLY = /^\s*(?:₹|Rs\.?|INR)\s*$/i;
-  const NUMBER_ONLY = /^\s*\d[\d,]*(?:\.\d+)?\s*$/;
+  // Some sites split a price into "₹"/"$" and "1,234" in separate elements: SYMBOL_ONLY + NUMBER_ONLY.
   const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEXTAREA', 'INPUT', 'OPTION', 'SELECT']);
 
   let rules = null;
@@ -168,7 +166,8 @@ html.${ON} .dyli-switch::after { left: 16px; }
   const isLiked = (id) => picks.some((p) => p.id === id && p.site === rules.id);
 
   function productUrl(id, fallback) {
-    return rules.productUrl ? rules.productUrl.replace('{id}', encodeURIComponent(id)) : fallback;
+    if (!rules.productUrl) return fallback;
+    return rules.productUrl.replace('{domain}', rules.domain).replace('{id}', encodeURIComponent(id));
   }
 
   // Some sites show product images as CSS backgrounds instead of <img>.
@@ -178,18 +177,21 @@ html.${ON} .dyli-switch::after { left: 16px; }
     return el.currentSrc || el.src || getComputedStyle(el).backgroundImage.match(/url\("?(.*?)"?\)/)?.[1] || '';
   }
 
-  // When a site has no stable price selector, take the first ₹ amount after `after`
+  // Just the first price in a block of text: "Rs. 495Rs. 1770(72% OFF)" → "Rs. 495".
+  const firstPriceIn = (text) => text.replace(/\s+/g, ' ').match(new RegExp(PRICE, 'i'))?.[0].trim() || '';
+
+  // When a site has no stable price selector, take the first price after `after`
   // (or anywhere in `root`). Prices sit just below the title on every site we've seen.
   function firstPrice(root, after) {
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    const re = new RegExp(PRICE, 'i');
     while (walker.nextNode()) {
       const node = walker.currentNode;
       if (after && !(after.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_FOLLOWING)) continue;
-      const m = node.data.match(re);
-      if (m) return m[0].trim();
+      const price = firstPriceIn(node.data);
+      if (price) return price;
     }
-    return '';
+    // Prices split across elements ("Rs." + "499") only show up in the combined text.
+    return after ? '' : firstPriceIn(root.textContent);
   }
 
   function readCard(card, id) {
@@ -198,7 +200,7 @@ html.${ON} .dyli-switch::after { left: 16px; }
       id,
       title: textOf(card, p.title),
       image: imageOf(card, p.image),
-      price: textOf(card, p.price) || firstPrice(card),
+      price: firstPriceIn(textOf(card, p.price)) || firstPrice(card),
       url: productUrl(id, card.querySelector('a[href]')?.href || location.href),
     };
   }
@@ -210,7 +212,7 @@ html.${ON} .dyli-switch::after { left: 16px; }
       id,
       title: title?.textContent.trim() || document.title,
       image: imageOf(document, p.image),
-      price: textOf(document, p.price) || firstPrice(document.body, title),
+      price: firstPriceIn(textOf(document, p.price)) || firstPrice(document.body, title),
       url: productUrl(id, location.href),
     };
   }
@@ -235,8 +237,14 @@ html.${ON} .dyli-switch::after { left: 16px; }
     btn.textContent = liked ? '❤️ Liked' : '♡ Like';
   }
 
+  // Record the pick's currency: the price's own symbol, else the site's currency.
+  function withCurrency(item) {
+    const parsed = globalThis.DYLI_CURRENCY.parse(item.price, rules.currency);
+    return { ...item, currency: parsed?.currency || rules.currency || null };
+  }
+
   function toggleLike(id, read) {
-    const item = isLiked(id) ? null : { ...read(), site: rules.id, siteName: rules.name, likedAt: Date.now() };
+    const item = isLiked(id) ? null : withCurrency({ ...read(), site: rules.id, siteName: rules.name, domain: rules.domain, likedAt: Date.now() });
     // Re-read before writing: other open tabs may have added picks since this one loaded.
     chrome.storage.local.get({ picks: [] }, (s) => {
       const others = s.picks.filter((p) => !(p.id === id && p.site === rules.id));

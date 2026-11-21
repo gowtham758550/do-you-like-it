@@ -13,6 +13,12 @@ const fail = (file, msg) => errors.push(`${file}: ${msg}`);
 
 const files = readdirSync(SITES).filter((f) => f.endsWith('.json') && f !== 'index.json');
 const index = JSON.parse(readFileSync(join(SITES, 'index.json'), 'utf8'));
+// Every site domain must be in the manifest, always-on or optional, or the extension never runs there.
+const manifest = JSON.parse(readFileSync(join(SITES, '../manifest.json'), 'utf8'));
+const manifestHosts = new Set([
+  ...manifest.content_scripts.flatMap((c) => c.matches),
+  ...(manifest.optional_host_permissions ?? []),
+]);
 const seenDomains = new Map();
 const seenIds = new Set();
 
@@ -37,7 +43,15 @@ for (const file of files) {
     if (seenDomains.has(d)) fail(file, `domain ${d} is already in ${seenDomains.get(d)}`);
     seenDomains.set(d, file);
   }
-  if (!site.domains?.some((d) => file === `${d}.json`)) fail(file, 'file name should match one of its domains');
+  if (file !== `${site.id}.json` && !site.domains?.some((d) => file === `${d}.json`)) {
+    fail(file, 'file name should be <id>.json or <domain>.json');
+  }
+  for (const d of site.domains ?? []) {
+    if (!manifestHosts.has(`*://*.${d}/*`)) fail(file, `${d} is not in manifest.json (content_scripts or optional_host_permissions)`);
+  }
+  for (const d of Object.keys(site.regions ?? {})) {
+    if (!site.domains?.includes(d)) fail(file, `regions.${d} is not in domains`);
+  }
 
   const age = (Date.now() - Date.parse(site.lastVerified)) / 86_400_000;
   // -1 day of slack: a date written today can still be "tomorrow" in UTC.

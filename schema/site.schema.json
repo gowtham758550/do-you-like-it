@@ -29,7 +29,29 @@
       "items": { "type": "string", "pattern": "^[a-z0-9.-]+\\.[a-z]{2,}$" },
       "description": "Registrable domains. Subdomains match automatically (amazon.in covers www.amazon.in)."
     },
-    "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+    "currency": { "type": "string", "pattern": "^[A-Z]{3}$", "description": "Default ISO 4217 currency, used when a price has no symbol or only an ambiguous one like \"$\"." },
+    "regions": {
+      "type": "object",
+      "description": "Per-domain display name and currency, for sites with one store per country (amazon.com, amazon.co.uk…). Keys must be listed in domains.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+        }
+      }
+    },
+    "cart": {
+      "type": "object",
+      "description": "Optional multi-item add-to-cart link. {domain} is the store's domain; item is repeated per pick with {n} (1-based) and {id}.",
+      "required": ["url", "item"],
+      "additionalProperties": false,
+      "properties": {
+        "url": { "type": "string", "pattern": "^https://" },
+        "item": { "type": "string" }
+      }
+    },
     "maintainers": { "type": "array", "minItems": 1, "items": { "type": "string" } },
     "lastVerified": { "type": "string", "format": "date" },
     "hide": { "$ref": "#/$defs/selectorGroups", "description": "Covered with a striped placeholder. Selectors in the \"price\" group also get a fixed width, so the placeholder doesn't reveal how long the price is." },
@@ -61,7 +83,7 @@
         "likeAnchor": { "$ref": "#/$defs/selector" }
       }
     },
-    "productUrl": { "type": "string", "pattern": "^https://.*\\{id\\}", "description": "Clean product link, with {id} for the product id." },
+    "productUrl": { "type": "string", "pattern": "^https://.*\\{id\\}", "description": "Clean product link, with {id} for the product id and optionally {domain} for the store's domain." },
     "ignore": { "type": "array", "items": { "$ref": "#/$defs/selector" }, "description": "Areas the generic ₹ detector should skip." },
     "genericDetection": { "type": "boolean", "default": true }
   }
