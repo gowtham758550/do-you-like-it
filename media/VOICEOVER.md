@@ -37,7 +37,7 @@ Do You Like It? is a free, open-source Chrome extension that hides prices on Ama
 • Tap ♡ Like to save products to a private picks list. Prices stay hidden until you choose to look
 • Nothing leaves your browser: no account, no tracking
 
-Chrome Web Store: <link once approved>
+Chrome Web Store: https://chromewebstore.google.com/detail/do-you-like-it/klifbeipeadkbbfidmanobgoompaiinn
 Source code: https://github.com/gowtham758550/do-you-like-it
 
 0:00 What it is

@@ -6,7 +6,11 @@ A Chrome extension for shopping together with anyone you're buying for. It hides
 
 > Inspired by a LinkedIn post asking shopping apps to let people hide prices.
 
-## Try it
+## Install
+
+**[Get it on the Chrome Web Store](https://chromewebstore.google.com/detail/do-you-like-it/klifbeipeadkbbfidmanobgoompaiinn)**
+
+## Run from source
 
 1. Open `chrome://extensions` and switch on **Developer mode** (top right).
 2. Click **Load unpacked** and pick the `extension/` folder.
