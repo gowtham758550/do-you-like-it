@@ -47,13 +47,6 @@ async function renderSiteBanner() {
   $('site-banner-btn').onclick = () => chrome.permissions.request({ origins: [origin] }).then((ok) => ok && window.close());
 }
 
-function cartLink(group, picks) {
-  const site = sites.find((s) => s.id === picks[0].site);
-  if (!site?.cart || !picks[0].domain) return null;
-  const items = picks.map((p, i) => site.cart.item.replaceAll('{n}', i + 1).replace('{id}', encodeURIComponent(p.id)));
-  return `${site.cart.url.replace('{domain}', picks[0].domain)}?${items.join('&')}`;
-}
-
 function renderPick(pick) {
   const li = document.createElement('li');
   li.className = 'pick';
@@ -115,18 +108,9 @@ function renderGroup(name, picks, collapsed) {
   actions.className = 'group-actions';
   const openAll = document.createElement('button');
   openAll.className = 'link';
-  openAll.textContent = `Open all (${picks.length})`;
+  openAll.textContent = picks.length === 1 ? 'Open' : `Open all (${picks.length})`;
   openAll.addEventListener('click', () => picks.forEach((p) => chrome.tabs.create({ url: p.url, active: false })));
   actions.append(openAll);
-  const cart = cartLink(name, picks);
-  if (cart) {
-    const addAll = document.createElement('button');
-    addAll.className = 'link';
-    addAll.textContent = 'Add all to cart';
-    addAll.title = 'Opens your cart on the site with every pick added. You review and pay there.';
-    addAll.addEventListener('click', () => chrome.tabs.create({ url: cart }));
-    actions.append(addAll);
-  }
 
   section.append(head, list, actions);
   return section;

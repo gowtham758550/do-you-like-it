@@ -112,10 +112,6 @@
     "likeAnchor": "#titleSection"
   },
   "productUrl": "https://www.{domain}/dp/{id}",
-  "cart": {
-    "url": "https://www.{domain}/gp/aws/cart/add.html",
-    "item": "ASIN.{n}={id}&Quantity.{n}=1"
-  },
   "ignore": [
     "#nav-search"
   ],

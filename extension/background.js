@@ -29,7 +29,7 @@ async function rulesFor(host) {
   return { ...site, domain, name: region.name ?? site.name, currency: region.currency ?? site.currency };
 }
 
-// What the popup needs: each site's domains, cart link, and whether it's turned on.
+// What the popup needs: each site's domains and whether it's turned on.
 async function siteList() {
   const sites = await loadSites();
   const { origins = [] } = await chrome.permissions.getAll();
@@ -38,7 +38,6 @@ async function siteList() {
     name: s.name,
     domains: s.domains,
     origins: originsFor(s),
-    cart: s.cart ?? null,
     enabled: originsFor(s).every((o) => origins.includes(o)),
   }));
 }
