@@ -31,7 +31,9 @@ If a site file has no `price` selector for products, the extension saves the fir
 
 **Always-on and optional stores.** Amazon.in, Flipkart and Myntra are on from install. Every other store is an optional permission: the popup offers "Turn on" when you visit it, and the extension then runs only on stores you've approved.
 
-**Picks list.** Grouped by store (fold each group open or closed), with subtotals and a total per currency. "Open all" opens a group in tabs; Amazon groups also get "Add all to cart". Checkout always happens on the store's own site.
+**Six shopping sites, global currencies.** Amazon (India, US, UK, Germany, Canada, Australia and UAE), eBay (US, UK, Germany, Australia and Canada), Etsy, IKEA, Flipkart and Myntra. That is 12 regional Amazon and eBay storefronts, plus Etsy and IKEA's international `.com` storefronts. Picks and totals work in the currency shown by each store.
+
+**Picks list.** Grouped by store (fold each group open or closed), with subtotals and a total per currency. A single pick has an "Open" button; groups with multiple picks have "Open all". Checkout always happens on the store's own site.
 
 ## Add a site
 
@@ -58,7 +60,7 @@ Other publishing files:
 
 ## Status
 
-Version 0.2.0. Stores: Amazon (IN, US, UK, DE, CA, AU, AE), eBay (US, UK, DE, AU, CA), Etsy, IKEA (every country), Flipkart, Myntra. Not yet included: a PIN to stop hiding being turned off, a shareable lookbook, and Shopify/Walmart/Zara rules. Known gap: Etsy shows prices inside size dropdowns, which page styles can't reach.
+Version 0.2.1. Supports 6 shopping sites: Amazon (IN, US, UK, DE, CA, AU, AE), eBay (US, UK, DE, AU, CA), Etsy, IKEA, Flipkart and Myntra. Not yet included: a PIN to stop hiding being turned off, a shareable lookbook, and Shopify/Walmart/Zara rules. Known gap: Etsy shows prices inside size dropdowns, which page styles can't reach.
 
 ## License
 

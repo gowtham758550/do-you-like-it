@@ -42,16 +42,6 @@
         }
       }
     },
-    "cart": {
-      "type": "object",
-      "description": "Optional multi-item add-to-cart link. {domain} is the store's domain; item is repeated per pick with {n} (1-based) and {id}.",
-      "required": ["url", "item"],
-      "additionalProperties": false,
-      "properties": {
-        "url": { "type": "string", "pattern": "^https://" },
-        "item": { "type": "string" }
-      }
-    },
     "maintainers": { "type": "array", "minItems": 1, "items": { "type": "string" } },
     "lastVerified": { "type": "string", "format": "date" },
     "hide": { "$ref": "#/$defs/selectorGroups", "description": "Covered with a striped placeholder. Selectors in the \"price\" group also get a fixed width, so the placeholder doesn't reveal how long the price is." },
