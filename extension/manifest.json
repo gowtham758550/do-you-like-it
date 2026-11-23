@@ -3,7 +3,7 @@
   "name": "Do You Like It?",
   "short_name": "Do You Like It",
   "version": "0.2.1",
-  "description": "Hide prices while shopping together across 6 stores and 12 regional Amazon/eBay storefronts—in any currency.",
+  "description": "Hide prices while shopping together. Save favorite products to a private picks list.",
   "icons": {
     "16": "icons/icon-16.png",
     "32": "icons/icon-32.png",
