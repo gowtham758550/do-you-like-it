@@ -60,7 +60,7 @@ Other publishing files:
 
 ## Status
 
-Version 0.2.1. Supports 6 shopping sites: Amazon (IN, US, UK, DE, CA, AU, AE), eBay (US, UK, DE, AU, CA), Etsy, IKEA, Flipkart and Myntra. Not yet included: a PIN to stop hiding being turned off, a shareable lookbook, and Shopify/Walmart/Zara rules. Known gap: Etsy shows prices inside size dropdowns, which page styles can't reach.
+Version 0.2.2. Supports 6 shopping sites: Amazon (IN, US, UK, DE, CA, AU, AE), eBay (US, UK, DE, AU, CA), Etsy, IKEA, Flipkart and Myntra. Not yet included: a PIN to stop hiding being turned off, a shareable lookbook, and Shopify/Walmart/Zara rules. Known gap: Etsy shows prices inside size dropdowns, which page styles can't reach.
 
 ## License
 
